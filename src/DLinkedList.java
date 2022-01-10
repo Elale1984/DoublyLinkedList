@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -20,6 +21,7 @@ public class DLinkedList<T extends Comparable<T>> {
         while (fin.hasNext()) {
             str = fin.next();
             str = cleanUp(str);
+            /* Test Print */ System.out.println(str);
             lst1.insertOrderUnique(str);
         }
         fin.close();
@@ -110,6 +112,33 @@ public class DLinkedList<T extends Comparable<T>> {
      * @return true if successful, false otherwise
      */
     public boolean remove(T val) {
+
+        if(this.header == null)
+            return false;
+        else{
+
+            DNode currentNode = this.header;
+
+
+            while (currentNode != null){
+                DNode nextNode = currentNode.next.prev;
+                DNode prevNode = currentNode.prev;
+
+                if(currentNode.data.compareTo(val) == 0){
+                    nextNode.prev = currentNode.prev;
+                    prevNode.next = nextNode;
+                    return true;
+
+                }
+                else {
+                    currentNode = currentNode.next;
+                }
+
+            }
+
+
+        }
+
         return true;
     }
 
