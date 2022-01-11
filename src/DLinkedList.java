@@ -21,15 +21,17 @@ public class DLinkedList<T extends Comparable<T>> {
         while (fin.hasNext()) {
             str = fin.next();
             str = cleanUp(str);
-            /* Test Print */ System.out.println(str);
+            /* Test Print */ System.out.println(str);;
             lst1.insertOrderUnique(str);
         }
         fin.close();
-
+        System.out.println();
         fin = new Scanner(new File("text2.in"));
         while (fin.hasNext()) {
             str = fin.next();
             str = cleanUp(str);
+            /* Test Print */ System.out.println(str);
+
             lst2.insertOrderUnique(str);
         }
 
@@ -45,6 +47,7 @@ public class DLinkedList<T extends Comparable<T>> {
         System.out.println("\n" + combined);
     }
 
+
     /**
      * ASSIGNED
      * @param str
@@ -52,6 +55,20 @@ public class DLinkedList<T extends Comparable<T>> {
      * chars removed
      */
     public static String cleanUp(String str) {
+
+        str = str.toLowerCase(Locale.ROOT);
+        char[] delimiters = new char[] {'!','@','#','$','%','&','(',')','.',',','?','\"','\''};
+
+        for (char delim:
+                delimiters) {
+
+            int index = str.lastIndexOf(delim);
+
+            if (index != -1) {
+                str = str.substring(0, index) + str.substring(index + 1);
+            }
+        }
+
         return str;
     }
 
@@ -149,6 +166,9 @@ public class DLinkedList<T extends Comparable<T>> {
      */
     public void insertOrder(T item) {
 
+
+
+
     }
 
     /**
@@ -157,6 +177,32 @@ public class DLinkedList<T extends Comparable<T>> {
      * @param item
      */
     public boolean insertOrderUnique(T item) {
+
+        DNode head = this.header;
+
+        if (head.data == null){
+            this.header = add(item);
+        }
+        else {
+
+            while (head.data != null ){
+
+                if(head.data.compareTo(item) < 0){
+                    DNode newNode = add(item);
+
+                    System.out.println(head.next.data);
+                    System.out.println(newNode.data + " is the new node and " + head.data + " is the head");
+
+                }
+                System.out.println("focus node is " + head.data);
+                head = head.next;
+
+            }
+        }
+
+        System.out.println(this.header.data);
+        System.out.println(this.header.next.data);
+        System.out.println(this.header.prev.data);
         return true;
     }
 
