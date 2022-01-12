@@ -21,8 +21,8 @@ public class DLinkedList<T extends Comparable<T>> {
         while (fin.hasNext()) {
             str = fin.next();
             str = cleanUp(str);
-            /* Test Print */ System.out.println(str);;
-            lst1.insertOrderUnique(str);
+            /* Test Print */ System.out.println(str);
+            lst1.insertOrder(str);
         }
         fin.close();
         System.out.println();
@@ -54,21 +54,17 @@ public class DLinkedList<T extends Comparable<T>> {
      * @return str in all lower case with LEADING and TRAILING non-alpha
      * chars removed
      */
+
+    /* Time complexity is O(n) */
     public static String cleanUp(String str) {
 
         str = str.toLowerCase(Locale.ROOT);
-        char[] delimiters = new char[] {'!','@','#','$','%','&','(',')','.',',','?','\"','\''};
 
-        for (char delim:
-                delimiters) {
-
-            int index = str.lastIndexOf(delim);
-
-            if (index != -1) {
-                str = str.substring(0, index) + str.substring(index + 1);
+        for (int i = 0; i < str.length(); i++){
+            if(!Character.isAlphabetic(str.charAt(i))){
+                str = str.replace(String.valueOf(str.charAt(i)), "");
             }
         }
-
         return str;
     }
 
@@ -166,7 +162,43 @@ public class DLinkedList<T extends Comparable<T>> {
      */
     public void insertOrder(T item) {
 
+        DNode newNode = new DNode(item);
+        newNode.next = null;
+        newNode.prev = null;
+        DNode current;
 
+        // if list is empty
+        if (header.data == null) {
+            header = newNode;
+
+        }
+
+
+        //if node is to be the new header
+        else if (header.data.compareTo(newNode.data) >= 0) {
+            newNode.next = header;
+            newNode.next.prev = newNode;
+            header = newNode;
+
+        }
+        else {
+
+            current = header;
+
+            while (current.next != null && current.next.data.compareTo(newNode.data) < 0){
+                current = current.next;
+            }
+
+            newNode.next = current.next;
+
+            if(current.next != null)
+                newNode.next.prev = newNode;
+
+            current.next = newNode;
+            newNode.prev = current;
+
+
+        }
 
 
     }
@@ -178,31 +210,7 @@ public class DLinkedList<T extends Comparable<T>> {
      */
     public boolean insertOrderUnique(T item) {
 
-        DNode head = this.header;
 
-        if (head.data == null){
-            this.header = add(item);
-        }
-        else {
-
-            while (head.data != null ){
-
-                if(head.data.compareTo(item) < 0){
-                    DNode newNode = add(item);
-
-                    System.out.println(head.next.data);
-                    System.out.println(newNode.data + " is the new node and " + head.data + " is the head");
-
-                }
-                System.out.println("focus node is " + head.data);
-                head = head.next;
-
-            }
-        }
-
-        System.out.println(this.header.data);
-        System.out.println(this.header.next.data);
-        System.out.println(this.header.prev.data);
         return true;
     }
 
