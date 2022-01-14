@@ -22,7 +22,8 @@ public class DLinkedList<T extends Comparable<T>> {
             str = fin.next();
             str = cleanUp(str);
             /* Test Print */ System.out.println(str);
-            lst1.insertOrder(str);
+            //lst1.insertOrder(str);
+            lst1.insertOrderUnique(str);
         }
         fin.close();
         System.out.println();
@@ -31,7 +32,7 @@ public class DLinkedList<T extends Comparable<T>> {
             str = fin.next();
             str = cleanUp(str);
             /* Test Print */ System.out.println(str);
-
+            //lst2.insertOrder(str);
             lst2.insertOrderUnique(str);
         }
 
@@ -163,44 +164,28 @@ public class DLinkedList<T extends Comparable<T>> {
     public void insertOrder(T item) {
 
         DNode newNode = new DNode(item);
-        newNode.next = null;
-        newNode.prev = null;
-        DNode current;
+        DNode node = header;
 
         // if list is empty
-        if (header.data == null) {
+        if (header == null) {
             header = newNode;
+            newNode.next = null;
+            newNode.prev = null;
+
 
         }
-
-
-        //if node is to be the new header
-        else if (header.data.compareTo(newNode.data) >= 0) {
-            newNode.next = header;
-            newNode.next.prev = newNode;
-            header = newNode;
-
-        }
+        //  if new node is to be inserted somewhere else
         else {
+            while (node.next.data != null && node.next.data.compareTo(newNode.data) < 0){
+                node = node.next;
 
-            current = header;
-
-            while (current.next != null && current.next.data.compareTo(newNode.data) < 0){
-                current = current.next;
             }
-
-            newNode.next = current.next;
-
-            if(current.next != null)
-                newNode.next.prev = newNode;
-
-            current.next = newNode;
-            newNode.prev = current;
+            newNode.next = node.next;
+            node.next = newNode;
+            newNode.prev = node;
 
 
         }
-
-
     }
 
     /**
@@ -209,8 +194,31 @@ public class DLinkedList<T extends Comparable<T>> {
      * @param item
      */
     public boolean insertOrderUnique(T item) {
+        DNode newNode = new DNode(item);
+        DNode node = header;
+
+        // if list is empty
+        if (header == null) {
+            header = newNode;
+            newNode.next = null;
+            newNode.prev = null;
+        }
+        //  if new node is to be inserted somewhere else
+        else {
+            while (node.next.data != null && node.next.data.compareTo(newNode.data) < 0){
+                node = node.next;
+            }
+            if(newNode.data.compareTo(node.data) != 0){
+                newNode.next = node.next;
+                node.next = newNode;
+                newNode.prev = node;
+            }
 
 
+
+
+
+        }
         return true;
     }
 
