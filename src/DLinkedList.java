@@ -1,3 +1,5 @@
+import org.w3c.dom.Node;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Locale;
@@ -164,11 +166,11 @@ public class DLinkedList<T extends Comparable<T>> {
      * @param item
      */
     public void insertOrder(T item) {
-        DNode newNode= new DNode(item); 
+        DNode newNode = new DNode(item);
         DNode currentNode = this.header.next;
-        while(currentNode != header){
+        while (currentNode != header) {
             // insert in the middle somewhere and then end
-            if(item.compareTo(currentNode.data) < 0){
+            if (item.compareTo(currentNode.data) < 0) {
                 newNode.next = currentNode;
                 newNode.prev = currentNode.prev;
                 currentNode.prev.next = newNode;
@@ -194,12 +196,12 @@ public class DLinkedList<T extends Comparable<T>> {
     public boolean insertOrderUnique(T item) {
         DNode newNode = new DNode(item);
         DNode currentNode = this.header.next;
-        while(currentNode != header){
+        while (currentNode != header) {
             // if the node already exists, just return false
-            if(item.equals(currentNode.data))
+            if (item.equals(currentNode.data))
                 return false;
             // otherwise, if it goes in the middle somewhere
-            if(item.compareTo(currentNode.data) < 0){
+            if (item.compareTo(currentNode.data) < 0) {
                 newNode.next = currentNode;
                 newNode.prev = currentNode.prev;
                 currentNode.prev.next = newNode;
@@ -222,12 +224,43 @@ public class DLinkedList<T extends Comparable<T>> {
     /**
      * ASSIGNED
      * PRE:  this and rhs are sorted lists
+     *
      * @param rhs
      * @return list that contains this and rhs merged into a sorted list
      * POST:  returned list will not contain duplicates
      */
     public DLinkedList merge(DLinkedList rhs) {
         DLinkedList result = new DLinkedList();
+
+        DNode firstHead = this.header;
+        DNode secondHead = rhs.header;
+
+        // if the first list is empty, just return the second list
+        if (firstHead == null)
+            return rhs;
+        // if the second list is empty, just return the first list
+        if (secondHead == null)
+            return this;
+        // otherwise, merge the two
+        DNode tempNode = new DNode(null);
+        DNode previousNode = tempNode;
+        // Iterate through until one of the list run out
+        while(firstHead != null && secondHead != null) {
+            if (firstHead.data.compareTo(secondHead.data) <= 0){
+                previousNode.next = firstHead;
+                firstHead = firstHead.next;
+            } else {
+                previousNode.next = secondHead;
+                secondHead = secondHead.next;
+            }
+            previousNode = previousNode.next;
+        }
+        if (firstHead != null)
+            previousNode.next = firstHead;
+        if (secondHead != null)
+            previousNode.next = secondHead;
+
+        result.header
         return result;
     }
 
