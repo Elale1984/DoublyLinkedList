@@ -160,6 +160,11 @@ public class DLinkedList<T extends Comparable<T>> {
         return true;
     }
 
+
+    // The insertOrder has a time complexity of O(n) - Linear Time, where n is the number of
+    // nodes in the DLL because we only iterate through one full time in worst case. Everything else is
+    // O(1) constant time which is factored out.
+
     /**
      * ASSIGNED
      *
@@ -187,7 +192,9 @@ public class DLinkedList<T extends Comparable<T>> {
         currentNode.prev = newNode;
     }
 
-
+    // The insertOrderUnique has a time complexity of O(n) - Linear Time, where n is the number of
+    // nodes in the DLL because we only iterate through one full time in worst case. Everything else is
+    // O(1) constant time which is factored out.
     /**
      * ASSIGNED
      *
@@ -229,39 +236,35 @@ public class DLinkedList<T extends Comparable<T>> {
      * @return list that contains this and rhs merged into a sorted list
      * POST:  returned list will not contain duplicates
      */
+
+    // This merge method has a time complexity of O(n + n) because we iterate throughout 2 full times in the
+    // worst case scenario.
+    // Can be simplified to be O(n)
     public DLinkedList merge(DLinkedList rhs) {
         DLinkedList result = new DLinkedList();
-
-        DNode firstHead = this.header;
-        DNode secondHead = rhs.header;
-
-        // if the first list is empty, just return the second list
-        if (firstHead == null)
-            return rhs;
-        // if the second list is empty, just return the first list
-        if (secondHead == null)
-            return this;
-        // otherwise, merge the two
-        DNode tempNode = new DNode(null);
-        DNode previousNode = tempNode;
-        // Iterate through until one of the list run out
-        while(firstHead != null && secondHead != null) {
-            if (firstHead.data.compareTo(secondHead.data) <= 0){
-                previousNode.next = firstHead;
-                firstHead = firstHead.next;
-            } else {
-                previousNode.next = secondHead;
-                secondHead = secondHead.next;
-            }
-            previousNode = previousNode.next;
+        DNode currentNode = this.header.next;
+        // first list
+        while(!currentNode.equals(this.header)){
+            // Remove the current node from the list by resetting the pointers.
+            currentNode.next.prev = currentNode.prev;
+            currentNode.prev.next = currentNode.next;
+            // use the insertOrder because there shouldn't be any duplicates of the first list.
+            result.insertOrder(currentNode.data);
+            // advance to the next node
+            currentNode = this.header.next;
         }
-        if (firstHead != null)
-            previousNode.next = firstHead;
-        if (secondHead != null)
-            previousNode.next = secondHead;
+        // focus now switches to rhs list
+        currentNode = rhs.header.next;
+        while(!currentNode.equals(rhs.header)){
+            // remove the currentNode from its place from the list by resetting the pointers.
+            currentNode.next.prev = currentNode.prev;
+            currentNode.prev.next = currentNode.next;
+            // using insertOrderUnique because the second list could contain some of the same words as the first list.
+            result.insertOrderUnique(currentNode.data);
+            // advancing to the next node
+            currentNode = rhs.header.next;
+        }
 
-        result.header
         return result;
     }
-
 }
