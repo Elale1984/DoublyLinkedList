@@ -21,7 +21,8 @@ public class DLinkedList<T extends Comparable<T>> {
         while (fin.hasNext()) {
             str = fin.next();
             str = cleanUp(str);
-            /* Test Print */ System.out.println(str);
+            /* Test Print */
+            System.out.println(str);
             //lst1.insertOrder(str);
             lst1.insertOrderUnique(str);
         }
@@ -31,7 +32,8 @@ public class DLinkedList<T extends Comparable<T>> {
         while (fin.hasNext()) {
             str = fin.next();
             str = cleanUp(str);
-            /* Test Print */ System.out.println(str);
+            /* Test Print */
+            System.out.println(str);
             //lst2.insertOrder(str);
             lst2.insertOrderUnique(str);
         }
@@ -51,6 +53,7 @@ public class DLinkedList<T extends Comparable<T>> {
 
     /**
      * ASSIGNED
+     *
      * @param str
      * @return str in all lower case with LEADING and TRAILING non-alpha
      * chars removed
@@ -61,8 +64,8 @@ public class DLinkedList<T extends Comparable<T>> {
 
         str = str.toLowerCase(Locale.ROOT);
 
-        for (int i = 0; i < str.length(); i++){
-            if(!Character.isAlphabetic(str.charAt(i))){
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isAlphabetic(str.charAt(i))) {
                 str = str.replace(String.valueOf(str.charAt(i)), "");
             }
         }
@@ -127,24 +130,23 @@ public class DLinkedList<T extends Comparable<T>> {
      */
     public boolean remove(T val) {
 
-        if(this.header == null)
+        if (this.header == null)
             return false;
-        else{
+        else {
 
             DNode currentNode = this.header;
 
 
-            while (currentNode != null){
+            while (currentNode != null) {
                 DNode nextNode = currentNode.next.prev;
                 DNode prevNode = currentNode.prev;
 
-                if(currentNode.data.compareTo(val) == 0){
+                if (currentNode.data.compareTo(val) == 0) {
                     nextNode.prev = currentNode.prev;
                     prevNode.next = nextNode;
                     return true;
 
-                }
-                else {
+                } else {
                     currentNode = currentNode.next;
                 }
 
@@ -162,31 +164,27 @@ public class DLinkedList<T extends Comparable<T>> {
      * @param item
      */
     public void insertOrder(T item) {
-
-        DNode newNode = new DNode(item);
-        DNode node = header;
-
-        // if list is empty
-        if (header == null) {
-            header = newNode;
-            newNode.next = null;
-            newNode.prev = null;
-
-
-        }
-        //  if new node is to be inserted somewhere else
-        else {
-            while (node.next.data != null && node.next.data.compareTo(newNode.data) < 0){
-                node = node.next;
-
+        DNode newNode= new DNode(item); 
+        DNode currentNode = this.header.next;
+        while(currentNode != header){
+            // insert in the middle somewhere and then end
+            if(item.compareTo(currentNode.data) < 0){
+                newNode.next = currentNode;
+                newNode.prev = currentNode.prev;
+                currentNode.prev.next = newNode;
+                currentNode.prev = newNode;
+                return;
             }
-            newNode.next = node.next;
-            node.next = newNode;
-            newNode.prev = node;
-
-
+            // traverse to the next node
+            currentNode = currentNode.next;
         }
+        //  placed at the end
+        newNode.next = currentNode;
+        newNode.prev = currentNode.prev;
+        currentNode.prev.next = newNode;
+        currentNode.prev = newNode;
     }
+
 
     /**
      * ASSIGNED
@@ -195,32 +193,31 @@ public class DLinkedList<T extends Comparable<T>> {
      */
     public boolean insertOrderUnique(T item) {
         DNode newNode = new DNode(item);
-        DNode node = header;
-
-        // if list is empty
-        if (header == null) {
-            header = newNode;
-            newNode.next = null;
-            newNode.prev = null;
-        }
-        //  if new node is to be inserted somewhere else
-        else {
-            while (node.next.data != null && node.next.data.compareTo(newNode.data) < 0){
-                node = node.next;
+        DNode currentNode = this.header.next;
+        while(currentNode != header){
+            // if the node already exists, just return false
+            if(item.equals(currentNode.data))
+                return false;
+            // otherwise, if it goes in the middle somewhere
+            if(item.compareTo(currentNode.data) < 0){
+                newNode.next = currentNode;
+                newNode.prev = currentNode.prev;
+                currentNode.prev.next = newNode;
+                currentNode.prev = newNode;
+                return true;
             }
-            if(newNode.data.compareTo(node.data) != 0){
-                newNode.next = node.next;
-                node.next = newNode;
-                newNode.prev = node;
-            }
-
-
-
-
-
+            // traverse to next node
+            currentNode = currentNode.next;
         }
+        // placed at the end
+        newNode.next = currentNode;
+        newNode.prev = currentNode.prev;
+        currentNode.prev.next = newNode;
+        currentNode.prev = newNode;
         return true;
+
     }
+
 
     /**
      * ASSIGNED
